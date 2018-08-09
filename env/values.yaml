@@ -18,7 +18,6 @@ expose:
     exposer: Ingress
     http: "true"
     tlsacme: "false"
-    pathMode: ""
   Annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: hook-succeeded
@@ -28,8 +27,6 @@ global:
   keycloak:
     url: "http://activiti-keycloak.jx-staging.35.195.247.101.nip.io/auth"
 
-runtime-bundle:
-  enabled: true
 
 application:
   activiti-cloud-query:
@@ -37,9 +34,6 @@ application:
       repository: activiti/activiti-cloud-query
       tag: latest
       pullPolicy: Always
-    db:
-      name: querypostgresql
-      password: query
     extraEnv: |
       - name: ACTIVITI_SECURITY_POLICIES_0_NAME
         value: "HR Group restricted to SimpleProcess and ConnectorProcess"
@@ -97,18 +91,6 @@ application:
           - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
             value: "*"
 
-  querypostgresql:
-     postgresPassword: query
-
-  activiti-cloud-demo-ui:
-    ingress:
-      enabled: true
-      hostName: "activiti-cloud-demo-ui.jx-staging.35.195.247.101.nip.io"
-      annotations:
-        kubernetes.io/ingress.class: nginx
-    gatewayUrl:  "http://activiti-cloud-gateway.jx-staging.35.195.247.101.nip.io"
-    idmUrl: "http://activiti-keycloak.jx-staging.35.195.247.101.nip.io/auth/realms/activiti/protocol/openid-connect/token"
-    idmClientId:  "activiti"
 
   activiti-cloud-audit:
     image:
