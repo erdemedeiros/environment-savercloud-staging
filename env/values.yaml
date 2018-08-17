@@ -31,8 +31,8 @@ global:
 application:
   activiti-cloud-query:
     image:
-      repository: ermedeiros/activiti-cloud-query
-      tag: 7.0.0.Beta1
+      repository: activiti/activiti-cloud-query
+      tag: latest
       pullPolicy: Always
     extraEnv: |
       - name: ACTIVITI_SECURITY_POLICIES_0_NAME
@@ -58,15 +58,15 @@ application:
 
   activiti-cloud-connector:
     image:
-      repository: ermedeiros/example-cloud-connector
-      tag: 7.0.0.Beta1
+      repository: activiti/example-cloud-connector
+      tag: latest
       pullPolicy: Always
     enabled: true
 
   runtime-bundle:
     image:
-      repository: ermedeiros/example-runtime-bundle
-      tag: 7.0.0.Beta1
+      repository: activiti/example-runtime-bundle
+      tag: latest
       pullPolicy: Always
     enabled: true
     extraEnv: |
@@ -94,8 +94,8 @@ application:
 
   activiti-cloud-audit:
     image:
-      repository: ermedeiros/activiti-cloud-audit
-      tag: 7.0.0.Beta1
+      repository: activiti/activiti-cloud-audit
+      tag: latest
       pullPolicy: Always
     extraEnv: |
           - name: ACTIVITI_SECURITY_POLICIES_0_NAME
