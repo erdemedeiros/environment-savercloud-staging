@@ -28,107 +28,10 @@ global:
     url: "http://activiti-keycloak.jx-staging.35.195.247.101.nip.io/auth"
 
 
-application:
-  activiti-cloud-query:
-    image:
-      repository: activiti/activiti-cloud-query
-      tag: latest
-      pullPolicy: Always
-    extraEnv: |
-      - name: ACTIVITI_SECURITY_POLICIES_0_NAME
-        value: "HR Group restricted to SimpleProcess and ConnectorProcess"
-      - name: ACTIVITI_SECURITY_POLICIES_0_GROUPS
-        value: "hr"
-      - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
-        value: "WRITE"
-      - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
-        value: "rb-my-app"
-      - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
-        value: "SimpleProcess,ConnectorProcess"
-      - name: ACTIVITI_SECURITY_POLICIES_1_NAME
-        value: "testgroup not restricted at all"
-      - name: ACTIVITI_SECURITY_POLICIES_1_GROUPS
-        value: "testgroup"
-      - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
-        value: "WRITE"
-      - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
-        value: "rb-my-app"
-      - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
-        value: "*"
-
-  activiti-cloud-connector:
-    image:
-      repository: activiti/example-cloud-connector
-      tag: latest
-      pullPolicy: Always
-    enabled: true
-
-  runtime-bundle:
-    image:
-      repository: activiti/example-runtime-bundle
-      tag: latest
-      pullPolicy: Always
-    enabled: true
-    extraEnv: |
-          - name: ACTIVITI_SECURITY_POLICIES_0_NAME
-            value: "HR Group restricted to SimpleProcess and ConnectorProcess"
-          - name: ACTIVITI_SECURITY_POLICIES_0_GROUPS
-            value: "hr"
-          - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
-            value: "WRITE"
-          - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
-            value: "rb-my-app"
-          - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
-            value: "SimpleProcess,ConnectorProcess"
-          - name: ACTIVITI_SECURITY_POLICIES_1_NAME
-            value: "testgroup not restricted at all"
-          - name: ACTIVITI_SECURITY_POLICIES_1_GROUPS
-            value: "testgroup"
-          - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
-            value: "WRITE"
-          - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
-            value: "rb-my-app"
-          - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
-            value: "*"
-
-
-  activiti-cloud-audit:
-    image:
-      repository: activiti/activiti-cloud-audit
-      tag: latest
-      pullPolicy: Always
-    extraEnv: |
-          - name: ACTIVITI_SECURITY_POLICIES_0_NAME
-            value: "HR Group restricted to SimpleProcess and ConnectorProcess"
-          - name: ACTIVITI_SECURITY_POLICIES_0_GROUPS
-            value: "hr"
-          - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
-            value: "WRITE"
-          - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
-            value: "rb-my-app"
-          - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
-            value: "SimpleProcess,ConnectorProcess"
-          - name: ACTIVITI_SECURITY_POLICIES_1_NAME
-            value: "testgroup not restricted at all"
-          - name: ACTIVITI_SECURITY_POLICIES_1_GROUPS
-            value: "testgroup"
-          - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
-            value: "WRITE"
-          - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
-            value: "rb-my-app"
-          - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
-            value: "*"
-
 infrastructure:
   activiti-keycloak:
     keycloak:
-      enabled: true
       keycloak:
-        username: admin
-        password: admin
-        persistence:
-          deployPostgres: false
-          dbVendor: H2
         ingress:
           enabled: true
           path: /
@@ -141,16 +44,6 @@ infrastructure:
               add_header Access-Control-Allow-Methods "POST, GET, OPTIONS, PUT, PATCH, DELETE";
               add_header Access-Control-Allow-Credentials true;
               add_header Access-Control-Allow-Headers "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization";
-        preStartScript: |
-          /opt/jboss/keycloak/bin/add-user.sh -u admin -p admin
-          /opt/jboss/keycloak/bin/add-user-keycloak.sh -r master -u admin -p admin
-          cp /realm/activiti-realm.json .
-          sed -i 's/activiti-cloud-demo-ui:30082/activiti-keycloak.jx-staging.35.195.247.101.nip.io/g' activiti-realm.json
-          sed -i 's/activiti-cloud-demo-ui:\*/activiti-keycloak.jx-staging.35.195.247.101.nip.io:*/g' activiti-realm.json
-          sed -i 's/placeholder.com/activiti-keycloak.jx-staging.35.195.247.101.nip.io:*/g' activiti-realm.json
-          sed -i 's/dummy.com/activiti-cloud-gateway.jx-staging.35.195.247.101.nip.io:*/g' activiti-realm.json
-          sed -i 's/activiti-cloud-sso-idm-kub:30082/activiti-cloud-gateway.jx-staging.35.195.247.101.nip.io/g' activiti-realm.json
-          sed -i 's/activiti-cloud-demo-ui:3000/activiti-cloud-demo-ui.jx-staging.35.195.247.101.nip.io/g' activiti-realm.json
   activiti-cloud-gateway:
     ingress:
       enabled: true
